@@ -20,14 +20,16 @@ public class MainActivity extends AppCompatActivity {
         helper = new BookStoreDBHelper(this);
     }
 
-    private void displayDBInfo(){
+    private Cursor queryStock(){
         SQLiteDatabase db = helper.getReadableDatabase();
 
         String[] col={
+                BookContract.BookEntry._ID,
                 BookContract.BookEntry.COLUMN_TITLE,
                 BookContract.BookEntry.COLUMN_AUTHOR,
                 BookContract.BookEntry.COLUMN_QUANTITY};
         Cursor cursor=db.query(BookContract.BookEntry.TABLE_NAME, col, null, null, null, null,null);
+        return cursor;
     }
     private void insertBooks(){
 
