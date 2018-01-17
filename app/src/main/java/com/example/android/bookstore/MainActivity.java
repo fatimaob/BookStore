@@ -19,11 +19,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         helper = new BookStoreDBHelper(this);
     }
-    @Override
-    protected void onStart() {
-        super.onStart();
-        displayDBInfo();
-    }
 
     private void displayDBInfo(){
         SQLiteDatabase db = helper.getReadableDatabase();
