@@ -8,16 +8,16 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.android.bookstore.data.BookContract;
-import com.example.android.bookstore.data.BookStoreDBHelper;
+import com.example.android.bookstore.data.BookDBHelper;
 
 public class MainActivity extends AppCompatActivity {
-    private BookStoreDBHelper helper;
+    private BookDBHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        helper = new BookStoreDBHelper(this);
+        helper = new BookDBHelper(this);
     }
 
     private Cursor queryStock(){
