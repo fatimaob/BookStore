@@ -34,70 +34,46 @@ public class BookCursorAdapter extends CursorAdapter {
     }
 
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
-        TextView product_name = (TextView) view.findViewById(R.id.inventory_item_name_text);
-        TextView product_quantity = (TextView) view.findViewById(R.id.inventory_item_current_quantity_text);
-        TextView product_price = (TextView) view.findViewById(R.id.inventory_item_price_text);
-        TextView product_sold = (TextView) view.findViewById(R.id.inventory_item_current_sold_text);
-        ImageView product_add_btn = (ImageView) view.findViewById(R.id.sale_product);
-        ImageView product_thumbnail = (ImageView) view.findViewById(R.id.product_thumbnail);
+    public void bindView(View view, final Context context, Cursor cursor) {
+        ImageView book_image = (ImageView) view.findViewById(R.id.book_image);
+        TextView book_title = (TextView) view.findViewById(R.id.book_title);
+        TextView book_author = (TextView) view.findViewById(R.id.book_author);
+        TextView book_quantity = (TextView) view.findViewById(R.id.book_quantity);
+        ImageView book_buy = (ImageView) view.findViewById(R.id.buy);
 
 
-        int nameColumnIndex = cursor.getColumnIndex(BookContract.BookEntry.COLUMN_TITLE);
-        int quantityColumnIndex = cursor.getColumnIndex(BookContract.BookEntry.COLUMN_QUANTITY);
-        int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COL_PRICE);
-        int thumbnailColumnIndex = cursor.getColumnIndex(InventoryEntry.COL_PICTURE);
-        int salesColumnIndex = cursor.getColumnIndex(InventoryEntry.COL_ITEMS_SOLD);
+        int imageIndex = cursor.getColumnIndex(BookContract.BookEntry.COLUMN_IMAGE);
+        int titleIndex = cursor.getColumnIndex(BookContract.BookEntry.COLUMN_TITLE);
+        int authorIndex = cursor.getColumnIndex(BookContract.BookEntry.COLUMN_AUTHOR);
+        int quantityIndex = cursor.getColumnIndex(BookContract.BookEntry.COLUMN_QUANTITY);
+        int idIndex = cursor.getInt(cursor.getColumnIndex(BookContract.BookEntry._ID));
 
-        int id = cursor.getInt(cursor.getColumnIndex(InventoryEntry._ID));
-        final String productName = cursor.getString(nameColumnIndex);
-        final int quantity = cursor.getInt(quantityColumnIndex);
-        final int products_sold = cursor.getInt(salesColumnIndex);
-        String productPrice = "Price $" + cursor.getString(priceColumnIndex);
-        Uri thumbUri = Uri.parse(cursor.getString(thumbnailColumnIndex));
+        Uri bookImage = Uri.parse(cursor.getString(imageIndex));
+        final String bookTitle = cursor.getString(titleIndex);
+        final String bookAuthor = cursor.getString(authorIndex);
+        final int bookQuantityInt = cursor.getInt(quantityIndex);
 
-        String productQuantity = String.valueOf(quantity) + " Inventory";
-        String productSold = String.valueOf(products_sold) + " Sold";
+        String bookQuantity = "Quantity: " + String.valueOf(bookQuantityInt);
 
-        final Uri currentProductUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, id);
+        final Uri currentBook = ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, idIndex);
 
-        Log.d(TAG, "genero Uri: " + currentProductUri + " Product name: " + productName + " id: " + id);
+        book_title.setText(bookTitle);
+        book_author.setText(bookAuthor);
+        book_quantity.setText(bookQuantity);
 
-        product_name.setText(productName);
-        product_quantity.setText(productQuantity);
-        product_price.setText(productPrice);
-        product_sold.setText(productSold);
-        //We use Glide to import photo images
-        Glide.with(context).load(thumbUri)
-                .placeholder(R.mipmap.ic_launcher)
-                .error(ic_insert_placeholder)
-                .crossFade()
-                .centerCrop()
-                .into(product_thumbnail);
-
-
-        product_add_btn.setOnClickListener(new View.OnClickListener() {
+        book_buy.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                Log.d(TAG, productName + " quantity= " + quantity);
                 ContentResolver resolver = view.getContext().getContentResolver();
                 ContentValues values = new ContentValues();
-                if (quantity > 0) {
-                    int qq = quantity;
-                    int yy = products_sold;
-                    Log.d(TAG, "new quabtity= " + qq);
-                    values.put(InventoryEntry.COL_QUANTITY, --qq);
-                    values.put(InventoryEntry.COL_ITEMS_SOLD, ++yy);
-                    resolver.update(
-                            currentProductUri,
-                            values,
-                            null,
-                            null
-                    );
-                    context.getContentResolver().notifyChange(currentProductUri, null);
+                if (bookQuantityInt > 0) {
+                    int x = bookQuantityInt;
+                    values.put(BookContract.BookEntry.COLUMN_QUANTITY, x--);
+                    resolver.update(currentBook, values, null, null);
+                    context.getContentResolver().notifyChange(currentBook, null);
                 } else {
-                    Toast.makeText(context, "Item out of stock", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Book is sold out!", Toast.LENGTH_SHORT).show();
                 }
             }
         });

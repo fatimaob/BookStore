@@ -5,6 +5,7 @@
     android:orientation="horizontal"
     android:padding="16dp">
         <ImageView
+            android:id="@+id/book_image"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_margin="8dp"
@@ -30,12 +31,6 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="8dp"
                 android:layout_marginRight="16dp"
-                android:textAppearance="?android:textAppearanceSmall"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:text="Quantity: "
                 android:textAppearance="?android:textAppearanceSmall"/>
             <TextView
                 android:id="@+id/book_quantity"
