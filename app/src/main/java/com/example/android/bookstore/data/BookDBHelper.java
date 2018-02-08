@@ -37,6 +37,6 @@ public class BookDBHelper extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
+        //database is still v1, nothing needed here
     }
 }
