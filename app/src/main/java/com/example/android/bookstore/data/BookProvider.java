@@ -86,7 +86,7 @@ public class BookProvider extends ContentProvider{
             throw new IllegalArgumentException("Book Genre Required");
         }
 
-        Float price = values.getAsFloat(BookContract.BookEntry.COLUMN_PRICE);
+        Integer price = values.getAsInteger(BookContract.BookEntry.COLUMN_PRICE);
         if (price == null || price < 0) {
             throw new IllegalArgumentException("Book Requires A Valid Price");
         }
@@ -107,7 +107,7 @@ public class BookProvider extends ContentProvider{
         }
 
         Integer supplierPhone = values.getAsInteger(BookContract.BookEntry.COLUMN_SUPPLIER_PHONE);
-        if (supplierPhone == null || supplierPhone>0) {
+        if (supplierPhone == null || supplierPhone<0) {
             throw new IllegalArgumentException("Supplier Requires A Valid Phone");
         }
 
@@ -192,7 +192,7 @@ public class BookProvider extends ContentProvider{
 
         if (values.containsKey(BookContract.BookEntry.COLUMN_SUPPLIER_PHONE)) {
             Integer supplierPhone = values.getAsInteger(BookContract.BookEntry.COLUMN_SUPPLIER_PHONE);
-            if (supplierPhone == null || supplierPhone>0) {
+            if (supplierPhone == null || supplierPhone<0) {
                 throw new IllegalArgumentException("Supplier Requires A Valid Phone");
             }
         }

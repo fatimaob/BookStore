@@ -68,8 +68,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, EditorActivity.class);
 
-                Uri currentProductUri = ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, id);
-                intent.setData(currentProductUri);
+                Uri currentBook = ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, id);
+                intent.setData(currentBook);
                 startActivity(intent);
 
             }
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             case R.id.insert_book:
                 insertBook();
                 return true;
-            // Respond to a click on the "Delete all entries" menu option
+
             case R.id.delete_all_books:
                 deleteAllBooks();
                 return true;
@@ -119,7 +119,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        // Define a projection that specifies the columns from the table we care about.
         String[] projection = {
                 BookContract.BookEntry._ID,
                 BookContract.BookEntry.COLUMN_TITLE,

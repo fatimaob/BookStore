@@ -109,6 +109,13 @@
         android:hint="Book Supplier Email"
         android:inputType="textCapWords" />
 
+    <EditText
+        android:id="@+id/book_supplier_phone"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:hint="Book Supplier Phone"
+        android:inputType="number" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -136,12 +143,5 @@
             android:text="Delete Book" />
 
     </LinearLayout>
-
-    <EditText
-        android:id="@+id/book_supplier_phone"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:hint="Book Supplier Phone"
-        android:inputType="number" />
 
 </LinearLayout>
