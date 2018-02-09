@@ -60,6 +60,9 @@ public class EditorActivity extends AppCompatActivity implements
     private EditText supplierEmail;
     private EditText supplierPhone;
 
+    private Button increment;
+    private Button decrement;
+
     private Button orderButton;
     private Button saveButton;
     private Button deleteButton;
@@ -90,7 +93,7 @@ public class EditorActivity extends AppCompatActivity implements
         bookImage = findViewById(R.id.book_image);
         bookTitle = findViewById(R.id.book_title);
         bookAuthor = findViewById(R.id.book_author);
-        bookGenreSpinner = (Spinner) findViewById(R.id.spinner_genre);
+        bookGenreSpinner = findViewById(R.id.spinner_genre);
         bookPrice = findViewById(R.id.book_price);
         bookQuantity = findViewById(R.id.book_quantity);
         supplierName = findViewById(R.id.book_supplier_name);
@@ -106,6 +109,43 @@ public class EditorActivity extends AppCompatActivity implements
         supplierName.setOnTouchListener(touchListener);
         supplierEmail.setOnTouchListener(touchListener);
         supplierPhone.setOnTouchListener(touchListener);
+
+        increment=findViewById(R.id.increment_button);
+        decrement=findViewById(R.id.decrement_button);
+
+        increment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String quantityString = bookQuantity.getText().toString().trim();
+
+                if (!TextUtils.isEmpty(quantityString)) {
+                    int quantity = Integer.parseInt(quantityString) + 1;
+                    bookQuantity.setText(Integer.toString(quantity));
+
+                    bookChanged = true;
+                }
+            }
+        });
+
+        decrement.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    String quantityString = bookQuantity.getText().toString().trim();
+
+                    if (!TextUtils.isEmpty(quantityString)) {
+                        int quantity = Integer.parseInt(quantityString);
+
+                        if (quantity > 0) {
+                            quantity--;
+                        }
+                        bookQuantity.setText(Integer.toString(quantity));
+
+                        bookChanged = true;
+                    }
+                }
+            });
 
         orderButton = findViewById(R.id.order_button);
         saveButton = findViewById(R.id.save_button);
@@ -146,7 +186,7 @@ public class EditorActivity extends AppCompatActivity implements
 
             getLoaderManager().initLoader(LOADER, null, this);
         }
-
+        setupSpinner();
 
     }
 
@@ -171,7 +211,6 @@ public class EditorActivity extends AppCompatActivity implements
                 }
             }
 
-            // Because AdapterView is an abstract class, onNothingSelected must be defined
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 bookGenre = BookContract.BookEntry.GENRE_NONFICTION;
@@ -190,11 +229,11 @@ public class EditorActivity extends AppCompatActivity implements
                 }
 
                 DialogInterface.OnClickListener discardButtonClickListener = new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                NavUtils.navigateUpFromSameTask(EditorActivity.this);
-                            }
-                        };
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                    }
+                };
 
                 showUnsavedChangesDialog(discardButtonClickListener);
                 return true;
@@ -303,7 +342,6 @@ public class EditorActivity extends AppCompatActivity implements
             }
         });
 
-        // Create and show the AlertDialog
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
@@ -402,7 +440,6 @@ public class EditorActivity extends AppCompatActivity implements
                 startActivity(intent);
             }
         } else {
-            // We are Updating
             int rowUpdated = getContentResolver().update(currentBook, values, null, null);
 
             if (rowUpdated == 0) {
