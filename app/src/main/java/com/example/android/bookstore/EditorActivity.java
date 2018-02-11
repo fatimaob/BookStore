@@ -63,9 +63,7 @@ public class EditorActivity extends AppCompatActivity implements
     private Button increment;
     private Button decrement;
 
-    private Button orderButton;
     private Button saveButton;
-    private Button deleteButton;
 
     private int bookGenre = BookContract.BookEntry.GENRE_NONFICTION;
 
@@ -147,16 +145,9 @@ public class EditorActivity extends AppCompatActivity implements
                 }
             });
 
-        orderButton = findViewById(R.id.order_button);
         saveButton = findViewById(R.id.save_button);
-        deleteButton = findViewById(R.id.delete_button);
 
-        orderButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                orderBook();
-            }
-        });
+
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,24 +156,13 @@ public class EditorActivity extends AppCompatActivity implements
             }
         });
 
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDeleteConfirmationDialog();
-            }
-        });
 
         if (currentBook == null) {
             setTitle("Add Book");
             saveButton.setVisibility(View.VISIBLE);
-            orderButton.setVisibility(View.GONE);
-            deleteButton.setVisibility(View.GONE);
 
         } else {
             setTitle("Edit Book");
-            saveButton.setVisibility(View.VISIBLE);
-            orderButton.setVisibility(View.VISIBLE);
-            deleteButton.setVisibility(View.VISIBLE);
 
             getLoaderManager().initLoader(LOADER, null, this);
         }
@@ -344,59 +324,6 @@ public class EditorActivity extends AppCompatActivity implements
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-    }
-
-    private void showDeleteConfirmationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Delete book?");
-        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                deleteBook();
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
-    private void orderBook() {
-        String[] TO = {supplyEmail};
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-
-        emailIntent.setData(Uri.parse("mailto:"));
-        emailIntent.setType("text/plain");
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "URGENT: Order Request" );
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "Please send a shipment of "+bookOrder+"  ASAP!");
-
-        try {
-            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-        } catch (android.content.ActivityNotFoundException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void deleteBook(){
-        if (currentBook != null) {
-
-            int rowsDeleted = getContentResolver().delete(currentBook, null, null);
-
-            if (rowsDeleted == 0) {
-                Toast.makeText(this,"Error Deleting Book",
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Book Deleted Successfully",
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
-        finish();
-
     }
 
     private void saveBook(){
