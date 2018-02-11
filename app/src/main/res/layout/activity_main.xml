@@ -32,7 +32,7 @@
             android:layout_centerHorizontal="true"
             android:fontFamily="sans-serif-medium"
             android:paddingTop="16dp"
-            android:text="Nothing To See Here"
+            android:text="Nothing To See Here. Please press + at the bottom of the screen to add books!"
             android:textAppearance="?android:textAppearanceMedium"/>
 
     </RelativeLayout>

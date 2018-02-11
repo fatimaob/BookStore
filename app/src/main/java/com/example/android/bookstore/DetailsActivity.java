@@ -10,10 +10,8 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -44,6 +42,8 @@ public class DetailsActivity extends AppCompatActivity implements
             BookContract.BookEntry.COLUMN_SUPPLIER_EMAIL,
             BookContract.BookEntry.COLUMN_SUPPLIER_PHONE
     };
+
+
 
     private Uri currentBook;
 
@@ -102,10 +102,10 @@ public class DetailsActivity extends AppCompatActivity implements
         increment = findViewById(R.id.increment_button);
         decrement = findViewById(R.id.decrement_button);
 
+        getLoaderManager().initLoader(LOADER, null, this);
+
         increment.setOnTouchListener(touchListener);
         decrement.setOnTouchListener(touchListener);
-
-        getLoaderManager().initLoader(LOADER, null, this);
 
         increment.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -27,10 +27,10 @@ import android.widget.Toast;
 import com.example.android.bookstore.data.BookContract;
 
 /**
- * Created by Fatima on 18-Jan-18.
+ * Created by Fatima on 11-Feb-18.
  */
 
-public class EditorActivity extends AppCompatActivity implements
+public class AddActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER = 0;
@@ -69,9 +69,6 @@ public class EditorActivity extends AppCompatActivity implements
 
     private boolean bookChanged = false;
 
-    private String supplyEmail;
-    private String bookOrder;
-
     private View.OnTouchListener touchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -83,7 +80,7 @@ public class EditorActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editor);
+        setContentView(R.layout.activity_add);
 
         Intent intent = getIntent();
         currentBook = intent.getData();
@@ -155,9 +152,7 @@ public class EditorActivity extends AppCompatActivity implements
             }
         });
 
-        setTitle("Edit Book");
-
-        getLoaderManager().initLoader(LOADER, null, this);
+        setTitle("Add Book");
 
         setupSpinner();
 
@@ -197,14 +192,14 @@ public class EditorActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             case android.R.id.home:
                 if (!bookChanged) {
-                    NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                    NavUtils.navigateUpFromSameTask(AddActivity.this);
                     return true;
                 }
 
                 DialogInterface.OnClickListener discardButtonClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                        NavUtils.navigateUpFromSameTask(AddActivity.this);
                     }
                 };
 
@@ -265,9 +260,6 @@ public class EditorActivity extends AppCompatActivity implements
             String name = cursor.getString(nameColumnIndex);
             String email = cursor.getString(emailColumnIndex);
             String phone = cursor.getString(phoneColumnIndex);
-
-            supplyEmail = email;
-            bookOrder = title;
 
             bookTitle.setText(title);
             bookAuthor.setText(author);
@@ -349,15 +341,14 @@ public class EditorActivity extends AppCompatActivity implements
         values.put(BookContract.BookEntry.COLUMN_SUPPLIER_PHONE, phoneString);
 
 
-        int rowUpdated = getContentResolver().update(currentBook, values, null, null);
+        Uri insertedRow = getContentResolver().insert(BookContract.BookEntry.CONTENT_URI, values);
 
-        if (rowUpdated == 0) {
-            Toast.makeText(this, "Error Updating Book", Toast.LENGTH_LONG).show();
+        if (insertedRow == null) {
+            Toast.makeText(this, "Error Adding Book", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this, "Book Updated Successfully", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Booked Added Successfully", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-
         }
 
 
